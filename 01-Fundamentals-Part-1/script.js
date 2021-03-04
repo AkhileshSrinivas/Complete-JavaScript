@@ -247,7 +247,7 @@ let n = '1' + 1; // '11'
 n = n - 1;
 console.log(n);
 
-*/
+
 
 ////////////////////////////////////
 // Truthy and Falsy Values
@@ -271,4 +271,42 @@ if (height) {
     console.log('YAY! Height is defined');
 } else {
     console.log('Height is UNDEFINED');
+}
+
+*/
+
+
+////////////////////////////////////
+// Equality Operators: == vs. ===
+// const age = '18';
+// if (age === 18) console.log('You just became an adult :D (strict)');
+
+// if (age == 18) console.log('You just became an adult :D (loose)');
+
+const favourite = Number(prompt("What's your favourite number?"));
+console.log(favourite);
+console.log(typeof favourite);
+
+if (favourite === 23) { // 22 === 23 -> FALSE
+    console.log('Cool! 23 is an amzaing number!')
+} else if (favourite === 7) {
+    console.log('7 is also a cool number')
+} else if (favourite === 9) {
+    console.log('9 is also a cool number')
+} else {
+    console.log('Number is not 23 or 7 or 9')
+}
+
+if (favourite !== 23) console.log('Why not 23?');
+
+
+
+let age = Number(prompt("What's your age"))
+console.log(age);
+if (age >= 18) {
+    alert("YAY! your good to get driving license")
+} else if (age >= 15 & age < 18) {
+    alert(`Oops!, Sorry you have ${18 - age} years left to get driving license`)
+} else {
+    alert("Oops!, Sorry your not allowed to driving license")
 }
