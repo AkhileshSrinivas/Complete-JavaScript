@@ -113,6 +113,10 @@ setTimeout(() => {
 
 */
 
+///////////////////////////////////////////////////////
+// Consuming Promises
+// Chaining Promises
+
 const renderCountry = function (data, className = '') {
   const html = `
       <article class="country ${className}">
@@ -132,9 +136,6 @@ const renderCountry = function (data, className = '') {
   countriesContainer.style.opacity = 1;
 };
 
-///////////////////////////////////////////////////////
-// Consuming Promises
-
 // const getCountryData = function (country) {
 //   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
 //     .then(function (response) {
@@ -147,9 +148,20 @@ const renderCountry = function (data, className = '') {
 // };
 
 const getCountryData = function (country) {
+  // country 1
   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
     .then(response => response.json())
-    .then(data => renderCountry(data[0]));
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+
+      if (!neighbour) return;
+
+      // Country 2
+      return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data, 'neighbour'));
 };
 
 getCountryData('portugal');
