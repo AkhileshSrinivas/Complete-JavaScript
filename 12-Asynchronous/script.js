@@ -558,6 +558,7 @@ createImage('img/img-1.jpg')
 
 ///////////////////////////////////////
 // Consuming Promises with Async/Await
+// Error Handling With try...catch
 
 const renderCountry = function (data, className = '') {
   const html = `
@@ -584,28 +585,42 @@ const getPosition = function () {
   });
 };
 
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
+};
+
 // fetch(`https://restcountries.eu/rest/v2/name/${country}`).then(res => console.log(res))
 
 const whereAmI = async function () {
-  // Geolocation
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
+  try {
+    // Geolocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
 
-  // Reverse geocoding
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    // Reverse geocoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
 
-  const dataGeo = await resGeo.json();
-  console.log(dataGeo);
+    if (!resGeo.ok) throw new Error('Problem getting location data');
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
 
-  // Country data
-  const res = await fetch(
-    `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
-  );
+    // Country data
+    const res = await fetch(
+      `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+    );
 
-  const data = await res.json();
-  console.log(data);
-  renderCountry(data[1]);
+    if (!res.ok) throw new Error('Problem getting country');
+    const data = await res.json();
+    console.log(data);
+    renderCountry(data[1]);
+  } catch (err) {
+    console.error(`${err} 💥`);
+    renderError(`💥 ${err.message}`);
+  }
 };
 
+whereAmI();
+whereAmI();
 whereAmI();
 console.log('FIRST');
